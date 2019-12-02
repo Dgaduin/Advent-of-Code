@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Atanas Pashkov",
+    "classifications": [
+        "Console"
+    ],
+    "name": "Advent of Code",
+    "identity": "AdventOfCode",
+    "shortName": "aoc",
+    "tags": {
+        "language": "C#",
+        "type": "project"
+    },
+    "sourceName": "Day_D",
+    "preferNameDirectory": true,
+    "sources": [
+        {
+            "exclude": [
+                "**/[Bb]in/**",
+                "**/[Oo]bj/**",
+                ".template.config/**/*",
+                "**/*.filelist",
+                "**/*.user",
+                "**/*.lock.json",
+                ".vscode/*",
+                ".git/**/*",
+                ".gitignore",
+                "README.md"
+            ]
+        }
+    ]
+}
