@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Day_2.Test
+namespace Day_02.Test
 {
     public class Test
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Day_2
+namespace Day_02
 {
     public class Program
     {
