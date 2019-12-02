@@ -11,7 +11,6 @@ namespace Day_1
         static void Main(string[] args)
         {
             List<string> input = File.ReadLines("input.txt").ToList();
-            // string input = File.ReadAllText("input.txt");
 
             Console.WriteLine(input.Select(x => Task1(Int32.Parse(x))).Sum());
             Console.WriteLine(input.Select(x => Task2(Int32.Parse(x))).Sum());
