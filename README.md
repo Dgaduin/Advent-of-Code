@@ -1,3 +1,5 @@
 # Advent-of-Code
 
-Contains a template to create a scafold per day and solutions to some of the years
+[Advent of code](https://adventofcode.com)
+
+Contains a template to create a scaffold per day and solutions to some of the years
