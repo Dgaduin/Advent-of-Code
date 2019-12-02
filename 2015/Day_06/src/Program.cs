@@ -4,13 +4,21 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Day_6
+namespace Day_06
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
             List<string> input = File.ReadLines("input.txt").ToList();
+            // string input = File.ReadAllText("input.txt");
+
+            Console.WriteLine(Task1());
+            Console.WriteLine(Task2());
+        }
+
+        public static string Task1(List<string> input)
+        {
             bool[,] lights = new bool[1000, 1000];
 
             var r1 = new Regex("(toggle|on|off) (\\d{1,}),(\\d{1,}).+ (\\d{1,}),(\\d{1,})");
@@ -54,7 +62,8 @@ namespace Day_6
                 }
             }
 
-            Console.WriteLine("Part one: {1}", count);
+            return count.ToString();
         }
+        public static string Task2() { return ""; }
     }
 }
