@@ -16,10 +16,10 @@ namespace Day_2
                 .Select(x => Int32.Parse(x))
                 .ToArray();
 
-            // Commenting so it doesn't interfere with Task 2
-            // input[1] = 12;
-            // input[2] = 2;
-            // Console.WriteLine(Task1(input)[0]);
+            var task1input = (int[])input.Clone();
+            task1input[1] = 12;
+            task1input[2] = 2;
+            Console.WriteLine(Task1(task1input)[0]);
             Console.WriteLine(Task2(input));
         }
 
