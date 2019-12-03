@@ -13,63 +13,71 @@ namespace Day_03
             List<string> input = File.ReadLines("input.txt").ToList();
 
             Console.WriteLine(Task1(input));
-            Console.WriteLine(Task2());
+            Console.WriteLine(Task2(input));
         }
-
-        static HashSet<(int x, int y)> GenerateWirePath(string value)
-        {
-            var values = value.Split(',');
-            (int x, int y) position = (0, 0);
-            var paths = new HashSet<(int x, int y)>();
-            foreach (var wire in values)
-            {
-                var direction = wire.Substring(0, 1);
-                var distance = Int32.Parse(wire.Substring(1));
-                IEnumerable<(int x, int y)> newPositions = null;
-                switch (direction)
-                {
-                    case "R":
-                        {
-                            newPositions = Enumerable.Range(position.x, distance).Select(w => (x: w, y: position.y));
-                            position.x += distance;
-                            break;
-                        }
-                    case "L":
-                        {
-                            newPositions = Enumerable.Range(position.x - distance, distance).Select(w => (x: w, y: position.y));
-                            position.x -= distance;
-                            break;
-                        }
-                    case "U":
-                        {
-                            newPositions = Enumerable.Range(position.y, distance).Select(w => (x: position.x, y: w));
-                            position.y += distance;
-                            break;
-                        }
-                    case "D":
-                        {
-                            newPositions = Enumerable.Range(position.y - distance, distance).Select(w => (x: position.x, y: w));
-                            position.y -= distance;
-                            break;
-                        }
-                };
-                paths.UnionWith(newPositions);
-            }
-            paths.Remove((0, 0));
-            return paths;
-        }
-
         public static string Task1(List<string> input)
         {
             var wire1 = GenerateWirePath(input[0]);
             var wire2 = GenerateWirePath(input[1]);
 
-            return wire1
-                .Intersect(wire2)
-                .Select(x => Math.Abs(x.x) + Math.Abs(x.y))
-                .Min()
+            return wire1.Keys
+                .Intersect(wire2.Keys)
+                .Min(x => Math.Abs(x.x) + Math.Abs(x.y))
                 .ToString();
         }
-        public static string Task2() { return ""; }
+        public static string Task2(List<string> input)
+        {
+            var wire1 = GenerateWirePath(input[0]);
+            var wire2 = GenerateWirePath(input[1]);
+
+            return wire1.Keys
+                .Intersect(wire2.Keys)
+                .Min(x => (wire1[x] + wire2[x] + 2))
+                .ToString();
+        }
+
+        static Dictionary<(int x, int y), int> GenerateWirePath(string value)
+        {
+            var values = value.Split(',');
+            int x = 0, y = 0, length = 0;
+            var map = new Dictionary<(int x, int y), int>();
+
+            foreach (var wire in values)
+            {
+                char direction = wire[0];
+                var distance = Int32.Parse(wire.Substring(1));
+
+                if (direction == 'R')
+                {
+                    for (int i = 0; i < distance; i++)
+                    {
+                        map.TryAdd((x: ++x, y: y), length++);
+                    }
+                }
+                if (direction == 'L')
+                {
+                    for (int i = 0; i < distance; i++)
+                    {
+                        map.TryAdd((x: --x, y: y), length++);
+                    }
+                }
+                if (direction == 'U')
+                {
+                    for (int i = 0; i < distance; i++)
+                    {
+                        map.TryAdd((x: x, y: ++y), length++);
+                    }
+
+                }
+                if (direction == 'D')
+                {
+                    for (int i = 0; i < distance; i++)
+                    {
+                        map.TryAdd((x: x, y: --y), length++);
+                    }
+                }
+            }
+            return map;
+        }
     }
 }
