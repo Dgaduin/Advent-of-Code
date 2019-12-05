@@ -17,55 +17,126 @@ namespace Day_05
                 .ToArray();
 
             Task1(input);
-            //Console.WriteLine(Task2(input));
+            Task1(input, 5);
         }
 
         public static int[] Task1(int[] instructions, int input = 1)
         {
             var output = new List<int>(100);
-            for (int i = 0; i < instructions.Length;)
+            int pointer = 0;
+            while (true)
             {
-                var instruction = instructions[i];
+                var instruction = instructions[pointer];
                 var opcode = instruction % 100;
                 if (opcode == 99) break;
-                if (opcode == 1)
+                else if (opcode == 1)
                 {
                     var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[i + 1]]
-                        : instructions[i + 1];
+                        ? instructions[instructions[pointer + 1]]
+                        : instructions[pointer + 1];
 
                     var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[i + 2]]
-                        : instructions[i + 2];
+                        ? instructions[instructions[pointer + 2]]
+                        : instructions[pointer + 2];
 
-                    instructions[instructions[i + 3]] = a + b;
-                    i += 4;
+                    instructions[instructions[pointer + 3]] = a + b;
+                    pointer += 4;
                     continue;
                 }
-                if (opcode == 2)
+                else if (opcode == 2)
                 {
                     var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[i + 1]]
-                        : instructions[i + 1];
+                        ? instructions[instructions[pointer + 1]]
+                        : instructions[pointer + 1];
 
                     var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[i + 2]]
-                        : instructions[i + 2];
+                        ? instructions[instructions[pointer + 2]]
+                        : instructions[pointer + 2];
 
-                    instructions[instructions[i + 3]] = a * b;
-                    i += 4;
+                    instructions[instructions[pointer + 3]] = a * b;
+                    pointer += 4;
                     continue;
                 }
-                if (opcode == 3)
+                else if (opcode == 5)
                 {
-                    instructions[instructions[i + 1]] = input;
-                    i += 2;
+                    var a = (instruction / 100) % 10 == 0
+                        ? instructions[instructions[pointer + 1]]
+                        : instructions[pointer + 1];
+
+                    var b = (instruction / 1000) % 10 == 0
+                        ? instructions[instructions[pointer + 2]]
+                        : instructions[pointer + 2];
+
+                    if (a != 0)
+                    {
+                        pointer = b;
+                        Console.WriteLine(b);
+                    }
+                    else
+                        pointer += 3;
                     continue;
                 }
-                if (opcode == 4)
+                else if (opcode == 6)
                 {
-                    output.Add(instructions[instructions[i + 1]]);
-                    i += 2;
+                    var a = (instruction / 100) % 10 == 0
+                        ? instructions[instructions[pointer + 1]]
+                        : instructions[pointer + 1];
+
+                    var b = (instruction / 1000) % 10 == 0
+                        ? instructions[instructions[pointer + 2]]
+                        : instructions[pointer + 2];
+
+                    if (a == 0)
+                    {
+                        pointer = b;
+                        Console.WriteLine(b);
+                    }
+                    else
+                        pointer += 3;
+                    continue;
+                }
+                else if (opcode == 7)
+                {
+                    var a = (instruction / 100) % 10 == 0
+                        ? instructions[instructions[pointer + 1]]
+                        : instructions[pointer + 1];
+
+                    var b = (instruction / 1000) % 10 == 0
+                        ? instructions[instructions[pointer + 2]]
+                        : instructions[pointer + 2];
+
+                    var c = a < b ? 1 : 0;
+
+                    instructions[instructions[pointer + 3]] = c;
+                    pointer += 4;
+                    continue;
+                }
+                else if (opcode == 8)
+                {
+                    var a = (instruction / 100) % 10 == 0
+                        ? instructions[instructions[pointer + 1]]
+                        : instructions[pointer + 1];
+
+                    var b = (instruction / 1000) % 10 == 0
+                        ? instructions[instructions[pointer + 2]]
+                        : instructions[pointer + 2];
+
+                    var c = a == b ? 1 : 0;
+
+                    instructions[instructions[pointer + 3]] = c;
+                    pointer += 4;
+                    continue;
+                }
+                else if (opcode == 3)
+                {
+                    instructions[instructions[pointer + 1]] = input;
+                    pointer += 2;
+                    continue;
+                }
+                else if (opcode == 4)
+                {
+                    output.Add(instructions[instructions[pointer + 1]]);
+                    pointer += 2;
                     continue;
                 }
             }
