@@ -43,7 +43,7 @@ Here are some example programs:
 
 Try every combination of phase settings on the amplifiers. What is the highest signal that can be sent to the thrusters?
 
-Your puzzle answer was 11828.
+Your puzzle answer was `11828`.
 
 ## --- Part Two ---
 
@@ -80,4 +80,4 @@ Here are some example programs:
 
 Try every combination of the new phase settings on the amplifier feedback loop. What is the highest signal that can be sent to the thrusters?
 
-Your puzzle answer was 1714298.
+Your puzzle answer was `1714298`.
