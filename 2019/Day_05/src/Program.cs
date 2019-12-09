@@ -145,6 +145,6 @@ namespace Day_05
 
             return instructions;
         }
-        public static string Task2() { return ""; }
+
     }
 }
