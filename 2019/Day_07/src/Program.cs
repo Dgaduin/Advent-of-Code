@@ -25,6 +25,7 @@ namespace Day_07
         public static async Task InitCode(long[] instructions, BufferBlock<long> input, BufferBlock<long> output, bool log = false)
         {
             long pointer = 0;
+            long offset = 0;
             while (true)
             {
                 var instruction = instructions[pointer];
@@ -35,45 +36,27 @@ namespace Day_07
                 }
                 else if (opcode == 1)
                 {
-                    var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[pointer + 1]]
-                        : instructions[pointer + 1];
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
 
-                    var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[pointer + 2]]
-                        : instructions[pointer + 2];
-
-                    instructions[instructions[pointer + 3]] = a + b;
+                    instructions[param3] = instructions[param1] + instructions[param2];
                     pointer += 4;
                     continue;
                 }
                 else if (opcode == 2)
                 {
-                    var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[pointer + 1]]
-                        : instructions[pointer + 1];
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
 
-                    var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[pointer + 2]]
-                        : instructions[pointer + 2];
-
-                    instructions[instructions[pointer + 3]] = a * b;
+                    instructions[param3] = instructions[param1] * instructions[param2];
                     pointer += 4;
                     continue;
                 }
                 else if (opcode == 5)
                 {
-                    var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[pointer + 1]]
-                        : instructions[pointer + 1];
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
 
-                    var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[pointer + 2]]
-                        : instructions[pointer + 2];
-
-                    if (a != 0)
+                    if (instructions[param1] != 0)
                     {
-                        pointer = b;
+                        pointer = instructions[param2];
                     }
                     else
                         pointer += 3;
@@ -81,17 +64,11 @@ namespace Day_07
                 }
                 else if (opcode == 6)
                 {
-                    var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[pointer + 1]]
-                        : instructions[pointer + 1];
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
 
-                    var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[pointer + 2]]
-                        : instructions[pointer + 2];
-
-                    if (a == 0)
+                    if (instructions[param1] == 0)
                     {
-                        pointer = b;
+                        pointer = instructions[param2];
                     }
                     else
                         pointer += 3;
@@ -99,56 +76,65 @@ namespace Day_07
                 }
                 else if (opcode == 7)
                 {
-                    var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[pointer + 1]]
-                        : instructions[pointer + 1];
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
 
-                    var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[pointer + 2]]
-                        : instructions[pointer + 2];
+                    var c = instructions[param1] < instructions[param2] ? 1 : 0;
 
-                    var c = a < b ? 1 : 0;
-
-                    instructions[instructions[pointer + 3]] = c;
+                    instructions[param3] = c;
                     pointer += 4;
                     continue;
                 }
                 else if (opcode == 8)
                 {
-                    var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[pointer + 1]]
-                        : instructions[pointer + 1];
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
 
-                    var b = (instruction / 1000) % 10 == 0
-                        ? instructions[instructions[pointer + 2]]
-                        : instructions[pointer + 2];
+                    var c = instructions[param1] == instructions[param2] ? 1 : 0;
 
-                    var c = a == b ? 1 : 0;
-
-                    instructions[instructions[pointer + 3]] = c;
+                    instructions[param3] = c;
                     pointer += 4;
                     continue;
                 }
                 else if (opcode == 3)
                 {
                     var a = await input.ReceiveAsync();
-                    instructions[instructions[pointer + 1]] = a;
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
+
+                    instructions[param1] = a;
                     pointer += 2;
                     continue;
                 }
                 else if (opcode == 4)
                 {
-                    var a = (instruction / 100) % 10 == 0
-                        ? instructions[instructions[pointer + 1]]
-                        : instructions[pointer + 1];
+                    ParamIndexes(instruction, out var param1, out var param2, out var param3);
 
-                    await output.SendAsync(a);
+                    await output.SendAsync(instructions[param1]);
                     pointer += 2;
                     continue;
                 }
             }
-        }
 
+            void ParamIndexes(long instruction, out long param1, out long param2, out long param3)
+            {
+                param1 = ((instruction / 100) % 10) switch
+                {
+                    0 => instructions[pointer + 1],
+                    1 => pointer + 1,
+                    2 => instructions[pointer + 1 + offset]
+                };
+                param2 = ((instruction / 1000) % 10) switch
+                {
+                    0 => instructions[pointer + 2],
+                    1 => pointer + 2,
+                    2 => instructions[pointer + 2 + offset]
+                };
+                param3 = ((instruction / 10000) % 10) switch
+                {
+                    0 => instructions[pointer + 3],
+                    1 => pointer + 3,
+                    2 => instructions[pointer + 3 + offset]
+                };
+            }
+        }
         public static async Task<string> Task1(long[] instructions)
         {
             long max = 0;
