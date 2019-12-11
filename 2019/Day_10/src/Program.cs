@@ -12,8 +12,8 @@ namespace Day_10
         {
             List<string> input = File.ReadLines("input.txt").ToList();
 
-            //Console.WriteLine(Task1(input));
-            Console.WriteLine(Task2(input));
+            Console.WriteLine(Task1(input));
+            Console.WriteLine(Task2(input, (19, 14)));
         }
 
         public static string Task1(List<string> input)
@@ -23,16 +23,25 @@ namespace Day_10
                 .CheckMaxAsteroids()
                 .ToString();
         }
-        public static string Task2(List<string> input)
+        public static string Task2(List<string> input, (int, int) origin)
         {
-            var asteroidData = input
+            var t = input
                 .ConvertMap()
-                .CountAsteroids((19, 14));
-                // .Select(z =>
-                // {
-                //     if(z.x)
-                // });
-            return "";
+                .CountAsteroids(origin)
+                .OrderBy(z =>
+                    z.Key switch
+                    {
+                        var (x, y) when x >= 0 && y < 0 => Math.Atan2(Math.Abs(x), Math.Abs(y)),
+                        var (x, y) when x > 0 && y >= 0 => Math.Atan2(Math.Abs(y), Math.Abs(x)) + 0.5 * Math.PI,
+                        var (x, y) when x <= 0 && y > 0 => Math.Atan2(Math.Abs(x), Math.Abs(y)) + Math.PI,
+                        var (x, y) when x < 0 && y <= 0 => Math.Atan2(Math.Abs(y), Math.Abs(x)) + 1.5 * Math.PI,
+                    }
+                )
+                .ToList();
+
+            var asteroidData = t[199];
+
+            return (asteroidData.Value.x * 100 + asteroidData.Value.y).ToString();
         }
 
 
@@ -100,7 +109,7 @@ namespace Day_10
             n = Math.Abs(n);
             m = Math.Abs(m);
 
-            
+
             if (n < m)
             {
                 int tmp = n;
@@ -117,6 +126,17 @@ namespace Day_10
 
             return n;
         }
-        public static int OrderValue()
+
+        public static int Quadrant(this (int, int) point)
+        {
+            return point switch
+            {
+                var (x, y) when x > 0 && y > 0 => 2,
+                var (x, y) when x < 0 && y > 0 => 3,
+                var (x, y) when x < 0 && y < 0 => 4,
+                var (x, y) when x > 0 && y < 0 => 1,
+                _ => 1
+            };
+        }
     }
 }

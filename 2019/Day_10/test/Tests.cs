@@ -97,7 +97,7 @@ namespace Day_10.Test
         [Fact]
         public void Task2_1()
         {
-            Assert.Equal("210", Program.Task2(
+            Assert.Equal("802", Program.Task2(
                 new List<string> {
                     ".#..##.###...#######",
                     "##.############..##.",
@@ -119,7 +119,7 @@ namespace Day_10.Test
                     ".#.#.###########.###",
                     "#.#.#.#####.####.###",
                     "###.##.####.##.#..##"
-                }));
+                },(11,13)));
         }
     }
 }
