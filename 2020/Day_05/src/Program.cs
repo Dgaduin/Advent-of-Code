@@ -20,16 +20,25 @@ namespace Day_05
         public static int Task1(List<string> input) => input.Select(GetId).Max();
         public static string Task2(List<string> input)
         {
-            var t = input.Select(GetId).OrderBy(x => x).ToList();
-            for (int i = 1; i < t.Count; i++)
+            var seats = input.Select(GetId).OrderBy(x => x).ToList();
+            for (int i = 1; i < seats.Count; i++)
             {
-                if (Math.Abs(t[i] - t[i - 1]) != 1)
-                    return $"{t[i]} {t[i - 1]}";
+                if (Math.Abs(seats[i] - seats[i - 1]) != 1)
+                    return $"{seats[i]} {seats[i - 1]}";
             }
             return "Fail";
         }
 
-        public static int GetId(string input)
+        // Because we have the x8 offset we can 
+        // parse the whole thing in straight binary
+        public static int GetId(string input) =>
+            Convert.ToInt32(
+                input.Replace("B", "1")
+                     .Replace("F", "0")
+                     .Replace("R", "1")
+                     .Replace("L", "0"), 2);
+
+        public static int GetIdOld(string input)
         {
             var column = BinaryPartition(input[7..], 'L', 0, 7);
             var row = BinaryPartition(input.Substring(0, 7), 'F', 0, 127);
