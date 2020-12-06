@@ -18,15 +18,15 @@ namespace Day_05
         }
 
         public static int Task1(List<string> input) => input.Select(GetId).Max();
-        public static string Task2(List<string> input)
+        public static int Task2(List<string> input)
         {
             var seats = input.Select(GetId).OrderBy(x => x).ToList();
             for (int i = 1; i < seats.Count; i++)
             {
-                if (Math.Abs(seats[i] - seats[i - 1]) != 1)
-                    return $"{seats[i]} {seats[i - 1]}";
+                if ((seats[i] - seats[i - 1]) != 1)
+                    return seats[i] - 1;
             }
-            return "Fail";
+            return 0;
         }
 
         // Because we have the x8 offset we can 
