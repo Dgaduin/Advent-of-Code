@@ -24,8 +24,7 @@
                 "**/*.lock.json",
                 ".vscode/*",
                 ".git/**/*",
-                ".gitignore",
-                "README.md"
+                ".gitignore"
             ]
         }
     ]
