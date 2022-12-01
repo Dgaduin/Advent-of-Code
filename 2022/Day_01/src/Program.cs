@@ -16,10 +16,6 @@ namespace Day_01
 
             Console.WriteLine(Task1(elfs));
             Console.WriteLine(Task2(elfs));
-            var temp1 = elfs.Select(x => x.Sum());
-            var temp2 = temp1.OrderByDescending(x => x);
-            var temp3 = temp2.Take(3);
-            var temp4 = temp3.Sum();
         }
 
         public static int Task1(List<List<int>> input) => input.Select(x => x.Sum()).Max();
