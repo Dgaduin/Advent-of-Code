@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
+using System.Linq;
 
 namespace Day_01.Test
 {
@@ -25,6 +26,7 @@ namespace Day_01.Test
                 "",
                 "10000"
             };
+            Elfs = Program.ChunkIntoElfs(input).ToList();
         }
         [Fact]
         public void Task1_1()
@@ -35,7 +37,7 @@ namespace Day_01.Test
         [Fact]
         public void Task2_1()
         {
-            Assert.Equal("", Program.Task2());
+            Assert.Equal(45000, Program.Task2(Elfs));
         }
     }
 }
