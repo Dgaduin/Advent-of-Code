@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net<7/TargetFramework>
+    <TargetFramework>net7</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Day_01.Test</RootNamespace>
   </PropertyGroup>
