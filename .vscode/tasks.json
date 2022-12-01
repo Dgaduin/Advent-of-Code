@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "day",
+            "type": "promptString",
+            "description": "Select Day to debug"
+        }
+    ],
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${fileDirname}/Day_${input:day}.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
