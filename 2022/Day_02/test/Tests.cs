@@ -7,27 +7,27 @@ namespace Day_02.Test;
 
 public class Test
 {
-    public List<(int, int)> payload;
+    public List<(int, int)> games;
 
     public Test()
     {
-        payload = new List<(int, int)>
+        games = new List<(int, int)>
         {
-            (1, 2),
-            (2, 1),
-            (3, 3),
+            (0, 1),
+            (1, 0),
+            (2, 2),
         };
     }
 
     [Fact]
     public void Task1_1()
     {
-        Assert.Equal(15, Program.Task1(payload));
+        Assert.Equal(15, Program.Task1(games));
     }
 
     [Fact]
     public void Task2_1()
     {
-        Assert.Equal("", Program.Task2());
+        Assert.Equal(12, Program.Task2(games));
     }
 }
