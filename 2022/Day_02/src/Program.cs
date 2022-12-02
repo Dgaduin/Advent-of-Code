@@ -20,6 +20,9 @@ public class Program
     Rock     = 0
     Paper    = 1
     Scissors = 2
+    Loss     = 0
+    Draw     = 1
+    Win      = 2
     */
     public static int Task1(List<(int, int)> games)
     {
