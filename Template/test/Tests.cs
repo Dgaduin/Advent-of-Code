@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
+using System.Linq;
 
 namespace Day_D.Test;
 
 public class Test
 {
+    public Test() { }
+
     [Fact]
     public void Task1_1()
     {

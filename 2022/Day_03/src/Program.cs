@@ -11,17 +11,31 @@ public static class Program
     {
         List<string> input = File.ReadLines("input.txt").ToList();
         // string input = File.ReadAllText("input.txt");
-        var backpacks = input.ProcessBackpacks();
+        var task1Commons = input.Task1Commons().ToList();
+        var task2Backpacks = input.Select(x => x.ToHashSet()).ToList();
 
-        Console.WriteLine(Task1(backpacks));
-        Console.WriteLine(Task2());
+        Console.WriteLine(Task1(task1Commons));
+        Console.WriteLine(Task2(task2Backpacks));
     }
 
-    public static int Task1(IEnumerable<(HashSet<char>, HashSet<char>, char common)> backpacks) => backpacks.Sum(x => x.common.CalculateScore());
+    public static int Task1(List<char> common) => common.Sum(x => x.CalculateScore());
 
-    public static string Task2() { return ""; }
+    public static int Task2(List<HashSet<char>> backpacks)
+    {
+        int score = 0;
+        for (int i = 0; i < backpacks.Count; i += 3)
+        {
+            var common = backpacks[i].Intersect(
+                            backpacks[i + 1].Intersect(
+                                backpacks[i + 2]))
+                         .FirstOrDefault();
 
-    public static IEnumerable<(HashSet<char>, HashSet<char>, char)> ProcessBackpacks(this List<string> input)
+            score += common.CalculateScore();
+        }
+        return score;
+    }
+
+    public static IEnumerable<char> Task1Commons(this List<string> input)
     {
         foreach (var row in input)
         {
@@ -29,7 +43,7 @@ public static class Program
             var firstHalf = row.Take(half).ToHashSet();
             var secondHalf = row.Skip(half).ToHashSet();
             var common = firstHalf.Intersect(secondHalf).FirstOrDefault();
-            yield return (firstHalf, secondHalf, common);
+            yield return common;
         }
         yield break;
     }
