@@ -14,19 +14,23 @@ public static class Program
         var pairs = input.ReadPairs();
 
         Console.WriteLine(Task1(pairs));
-        Console.WriteLine(Task2());
+        Console.WriteLine(Task2(pairs));
     }
 
     public static int Task1(List<List<int>> pairs) =>
         pairs.Count(x =>
             (x[0] <= x[2] && x[1] >= x[3]) ||
             (x[0] >= x[2] && x[1] <= x[3]));
-    public static string Task2() { return ""; }
+
+    public static int Task2(List<List<int>> pairs) =>
+        pairs.Count(x =>
+            (x[1] >= x[2] && x[1] <= x[3]) ||
+            (x[3] >= x[0] && x[3] <= x[1]));
 
     public static List<List<int>> ReadPairs(this List<string> input) =>
-        input
-            .Select(row => row.Split(',', '-')
-                              .Select(Int32.Parse)
-                              .ToList())
-            .ToList();
+            input
+                .Select(row => row.Split(',', '-')
+                                  .Select(Int32.Parse)
+                                  .ToList())
+                .ToList();
 }

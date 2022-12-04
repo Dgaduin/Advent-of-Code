@@ -31,6 +31,6 @@ public class Test
     [Fact]
     public void Task2_1()
     {
-        Assert.Equal("", Program.Task2());
+        Assert.Equal(4, Program.Task2(pairs));
     }
 }
