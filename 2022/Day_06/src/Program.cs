@@ -21,16 +21,8 @@ public static class Program
 
     private static int ExtractIndexOfUniqueSize(string input, int size)
     {
-        var list = input.Select(x => x - 'a').ToArray();
-        int i = 0;
-
-        for (; i < list.Length - size; i++)
-        {
-            var range = new Range(i, i + size);
-            var temp = list[range];
-            var set = list[range].ToHashSet();
-            if (set.Count == size) break;
-        }
-        return i + size;
+        for (int i = 0; i < input.Length - size; i++)
+            if (input[i..(i + size)].ToHashSet().Count == size) return i + size;
+        return 0;
     }
 }
