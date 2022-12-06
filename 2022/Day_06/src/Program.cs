@@ -9,13 +9,28 @@ public static class Program
 {
     static void Main(string[] args)
     {
-        // List<string> input = File.ReadLines("input.txt").ToList();
-        // string input = File.ReadAllText("input.txt");
+        string input = File.ReadAllText("input.txt");
 
-        Console.WriteLine(Task1());
-        Console.WriteLine(Task2());
+        Console.WriteLine(Task1(input));
+        Console.WriteLine(Task2(input));
     }
 
-    public static string Task1() { return ""; }
-    public static string Task2() { return ""; }
+    public static int Task1(string input) => ExtractIndexOfUniqueSize(input, 4);
+
+    public static int Task2(string input) => ExtractIndexOfUniqueSize(input, 14);
+
+    private static int ExtractIndexOfUniqueSize(string input, int size)
+    {
+        var list = input.Select(x => x - 'a').ToArray();
+        int i = 0;
+
+        for (; i < list.Length - size; i++)
+        {
+            var range = new Range(i, i + size);
+            var temp = list[range];
+            var set = list[range].ToHashSet();
+            if (set.Count == size) break;
+        }
+        return i + size;
+    }
 }
