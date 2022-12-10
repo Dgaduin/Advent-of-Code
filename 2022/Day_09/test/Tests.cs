@@ -8,6 +8,7 @@ namespace Day_09.Test;
 public class Test
 {
     List<string> input;
+    List<string> input2;
     public Test()
     {
         input = new List<string>
@@ -21,6 +22,16 @@ public class Test
             "L 5",
             "R 2"
         };
+        input2 = new List<string>{
+            "R 5",
+            "U 8",
+            "L 8",
+            "D 3",
+            "R 17",
+            "D 10",
+            "L 25",
+            "U 20",
+        };
     }
 
     [Fact]
@@ -32,6 +43,12 @@ public class Test
     [Fact]
     public void Task2_1()
     {
-        Assert.Equal("", Program.Task2());
+        Assert.Equal(1, Program.Task2(input));
+    }
+
+    [Fact]
+    public void Task2_2()
+    {
+        Assert.Equal(36, Program.Task2(input2));
     }
 }
