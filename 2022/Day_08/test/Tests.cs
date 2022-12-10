@@ -28,6 +28,6 @@ public class Test
     [Fact]
     public void Task2_1()
     {
-        Assert.Equal("", Program.Task2());
+        Assert.Equal(8, Program.Task2(input));
     }
 }

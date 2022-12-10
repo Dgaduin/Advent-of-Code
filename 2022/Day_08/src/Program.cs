@@ -10,10 +10,9 @@ public static class Program
     static void Main(string[] args)
     {
         List<string> input = File.ReadLines("input.txt").ToList();
-        // string input = File.ReadAllText("input.txt");
 
         Console.WriteLine(Task1(input));
-        Console.WriteLine(Task2());
+        Console.WriteLine(Task2(input));
     }
 
     public static int Task1(List<string> input)
@@ -62,5 +61,47 @@ public static class Program
         count += tempSet.Count;
         return count;
     }
-    public static string Task2() { return ""; }
+    public static int Task2(List<string> input)
+    {
+        var maxScore = 0;
+        var rowLength = input.First().Length;
+
+        for (int i = 1; i < input.Count - 1; i++)
+        {
+            for (int j = 1; j < rowLength - 1; j++)
+            {
+                var score = GetScore(input, i, j);
+                if (score > maxScore) maxScore = score;
+            }
+        }
+        return maxScore;
+
+        int GetScore(List<string> input, int x, int y)
+        {
+            int[] maxes = new int[] { 0, 0, 0, 0 }; // right,bottom,left,top
+            var rowLength = input.First().Length;
+            var tree = input[x][y];
+            for (int i = y + 1; i < rowLength; i++)
+            {
+                maxes[0]++;
+                if (tree <= input[x][i]) break;
+            }
+            for (int i = x + 1; i < input.Count; i++)
+            {
+                maxes[1]++;
+                if (tree <= input[i][y]) break;
+            }
+            for (int i = y - 1; i >= 0; i--)
+            {
+                maxes[2]++;
+                if (tree <= input[x][i]) break;
+            }
+            for (int i = x - 1; i >= 0; i--)
+            {
+                maxes[3]++;
+                if (tree <= input[i][y]) break;
+            }
+            return maxes[0] * maxes[1] * maxes[2] * maxes[3];
+        }
+    }
 }
