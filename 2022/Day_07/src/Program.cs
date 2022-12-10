@@ -72,12 +72,9 @@ public interface Node
     int Size { get; }
 }
 
-[DebuggerDisplay("- {Name} (dir, size={Size})")]
 public class Directory : Node
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Directory Parent { get; set; }
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public string Name { get; set; }
     public List<Node> Nodes { get; set; } = new List<Node>();
     public int Size => Nodes.Sum(x => x.Size);
@@ -96,12 +93,9 @@ public class Directory : Node
     }
 }
 
-[DebuggerDisplay("- {Name} (file, size={Size})")]
 public class NFile : Node
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public string Name { get; set; }
 
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public int Size { get; set; }
 }
