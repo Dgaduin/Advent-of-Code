@@ -13,10 +13,12 @@ public class Program
         List<string> input = File.ReadLines("input.txt").ToList();
         // string input = File.ReadAllText("input.txt");
         var best = new Dictionary<(int, int), int>();
+
         Stopwatch sw = Stopwatch.StartNew();
         Console.WriteLine(Task1(input, best));
         sw.Stop();
         Console.WriteLine(sw.ElapsedMilliseconds);
+
         sw = Stopwatch.StartNew();
         Console.WriteLine(Task2(input, best));
         sw.Stop();
@@ -122,21 +124,19 @@ public class Program
 
         bool IsValid(int x, int y)
         {
-            try
-            {
-                if (previousPath.Contains((x, y))) return false;
+            if (x < 0) return false;
+            if (y < 0) return false;
+            if (x >= input.Count) return false;
+            if (y >= input[0].Length) return false;
 
-                var a = input[i][j] == 'S' ? 0 : input[i][j] - 'a';
-                var b = input[x][y] == 'E' ? 'z' - 'a' : input[x][y] - 'a';
+            if (previousPath.Contains((x, y))) return false;
 
-                if (a + 1 >= b)
-                    return true;
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
+            var a = input[i][j] == 'S' ? 0 : input[i][j] - 'a';
+            var b = input[x][y] == 'E' ? 'z' - 'a' : input[x][y] - 'a';
+
+            if (a + 1 >= b)
+                return true;
+            return false;
         }
     }
 }
