@@ -16,7 +16,7 @@ public static class Program
         var input = File.ReadLines("input.txt").Where(x => x != "").Chunk(2);
 
         Console.WriteLine(Task1(input));
-        Console.WriteLine(Task2());
+        Console.WriteLine(Task2(input));
     }
 
     public static int Task1(IEnumerable<string[]> input)
@@ -31,7 +31,19 @@ public static class Program
         }
         return sum;
     }
-    public static string Task2() { return ""; }
+    public static int Task2(IEnumerable<string[]> input)
+    {
+        var pairs = input.SelectMany(x => { var t = ParseInput(x); return new[] { t.Item1, t.Item2 }; }).ToList();
+        var divider1 = ParseLine("[[2]]");
+        var divider2 = ParseLine("[[6]]");
+        pairs.Add(divider1);
+        pairs.Add(divider2);
+
+        var x = pairs.OrderByDescending(x => x, new DataComparer()).ToList();
+        var a = x.IndexOf(divider1) + 1;
+        var b = x.IndexOf(divider2) + 1;
+        return a * b;
+    }
 
     public static bool? CompareData(Data a, Data b)
     {
@@ -57,16 +69,10 @@ public static class Program
         return null;
     }
 
-    public static (Data, Data) ParseInput(string[] input)
-    {
-        var list1 = ParseLine(input[0]);
-        var list2 = ParseLine(input[1]);
-        return (list1, list2);
-    }
+    public static (Data, Data) ParseInput(string[] input) => (list1: ParseLine(input[0]), list2: ParseLine(input[1]));
 
     public static Data ParseLine(string line)
     {
-        int inListCounter = 1;
         var numberBuffer = new StringBuilder();
         var returnBuffer = new Data() { IntValue = -1, ListValue = new List<Data>() };
         var currentList = returnBuffer;
@@ -75,39 +81,40 @@ public static class Program
         {
             var c = line[i];
             if (c == '[')
-            {
-                inListCounter++;
                 currentList = currentList.AddListValue(null, new List<Data>());
-                continue;
-            }
-            if (c == ']')
+            else if (c == ']')
             {
                 if (numberBuffer.Length > 0)
                 {
-                    var val = Int32.Parse(numberBuffer.ToString());
-                    currentList.AddListValue(val);
+                    currentList.AddListValue(Int32.Parse(numberBuffer.ToString()));
                     numberBuffer.Clear();
                 }
-                inListCounter--;
                 currentList = currentList.Parent;
-                continue;
             }
-            if ((c - '0') <= 9 && (c - '0') >= 0)
-            {
+            else if ((c - '0') <= 9 && (c - '0') >= 0)
                 numberBuffer.Append(c);
-            }
-            if (c == ',')
+            else if (c == ',')
             {
                 if (numberBuffer.Length > 0)
                 {
-                    var val = Int32.Parse(numberBuffer.ToString());
-                    currentList.AddListValue(val);
+                    currentList.AddListValue(Int32.Parse(numberBuffer.ToString()));
                     numberBuffer.Clear();
                 }
             }
         }
         return returnBuffer;
     }
+}
+
+public class DataComparer : IComparer<Data>
+{
+    public int Compare(Data a, Data b) =>
+        Program.CompareData(a, b) switch
+        {
+            true => 1,
+            false => -1,
+            null => 0
+        };
 }
 
 public class Data
@@ -124,15 +131,9 @@ public class Data
         return value;
     }
 
-    public Data GenerateChild(int? intValue = null, List<Data> listValue = null)
+    public Data GenerateChild(int? intValue = null, List<Data> listValue = null) => intValue switch
     {
-        if (intValue is not null)
-        {
-            return new Data() { IntValue = intValue.Value, Parent = this };
-        }
-        else
-        {
-            return new Data() { ListValue = listValue, Parent = this };
-        }
-    }
+        not null => new Data() { IntValue = intValue.Value, Parent = this },
+        _ => new Data() { ListValue = listValue, Parent = this }
+    };
 }
