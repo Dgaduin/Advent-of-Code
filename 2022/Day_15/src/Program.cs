@@ -12,26 +12,35 @@ public static class Program
         var input = File.ReadLines("input.txt").ParseInput();
         // string input = File.ReadAllText("input.txt");
 
-        Console.WriteLine(Task1(input));
-        Console.WriteLine(Task2());
+        Task1(input);
     }
 
-    public static long Task1(List<(long, long, long, long)> input)
+    public static void Task1(List<(long, long, long, long)> input)
     {
-        var target = 10;
+        var target = 4000000;
         var sensors = input
                     .Select(a => (x: a.Item1, y: a.Item2, r: MDistance(a)))
                     .ToList();
-        List<(long, long)> mapStack = GenerateRowMatches(target, sensors);
+        var mapStack = GenerateRowMatches(target, sensors);
 
-        return mapStack.Aggregate(new long(), (a, b) => a += (b.Item2 - b.Item1) + 1) - 1;
+        Console.WriteLine(mapStack.Aggregate(new long(), (a, b) => a += (b.Item2 - b.Item1) + 1) - 1);
 
-
+        for (long i = 0; i <= 4000000; i++)
+        {
+            mapStack = GenerateRowMatches(i, sensors);
+            if (mapStack.Count > 1)
+            {
+                Console.Write($"{i}:");
+                mapStack.ForEach(x => Console.Write($"{x} "));
+                var value = (mapStack[0].Item2 + 1) * 4000000 + i;
+                Console.WriteLine(value);
+            }
+        }
 
         long MDistance((long ax, long ay, long bx, long by) z) => Math.Abs(z.ax - z.bx) + Math.Abs(z.ay - z.by);
     }
 
-    private static List<(long, long)> GenerateRowMatches(int target, List<(long x, long y, long r)> sensors)
+    private static List<(long, long)> GenerateRowMatches(long target, List<(long x, long y, long r)> sensors)
     {
         var map = new List<(long, long)>();
 
@@ -49,9 +58,9 @@ public static class Program
         for (int i = 1; i < orderedMap.Count; i++)
         {
             var curMap = orderedMap[i];
-            if (curMap.Item1 >= prevMap.Item1 && curMap.Item1 <= prevMap.Item2)
+            if (curMap.Item1 >= prevMap.Item1 && curMap.Item1 <= prevMap.Item2 + 1)
             {
-                if (curMap.Item2 >= prevMap.Item2)
+                if (curMap.Item2 >= prevMap.Item2 || curMap.Item1 == prevMap.Item2 + 1)
                     prevMap.Item2 = curMap.Item2;
             }
             else

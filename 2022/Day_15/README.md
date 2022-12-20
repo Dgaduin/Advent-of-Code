@@ -93,3 +93,5 @@ So, suppose you have an arrangement of beacons and sensors like in the example a
 In this example, in the row where y=10, there are 26 positions where a beacon cannot be present.
 
 Consult the report from the sensors you just deployed. In the row where y=2000000, how many positions cannot contain a beacon?
+
+Your puzzle answer was 13734006908372.
