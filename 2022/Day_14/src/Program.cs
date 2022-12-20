@@ -12,20 +12,33 @@ public static class Program
         List<string> input = File.ReadLines("input.txt").ToList();
         // string input = File.ReadAllText("input.txt");
         var map = CreateMap(input);
-        Console.WriteLine(Task1(map));
-        Console.WriteLine(Task2());
+        Task1(map);
     }
 
-    public static int Task1(HashSet<(int x, int y)> map)
+    public static void Task1(HashSet<(int x, int y)> map)
     {
         var lowerBound = map.MaxBy(a => a.y).y;
+
+        var floor = Enumerable.Range(0, 1000).Select(x => (x, lowerBound + 2));
+        map.UnionWith(floor);
+
         var startingPoint = (x: 500, y: 0);
         var sand = startingPoint;
         var counter = 0;
+        var t1Flag = true;
+
         while (true)
         {
-            if (sand.y >= lowerBound)
+            if (t1Flag && sand.y >= lowerBound)
+            {
+                t1Flag = false;
+                Console.WriteLine(counter);
+            }
+            if (map.Contains(startingPoint))
+            {
+                Console.WriteLine(counter);
                 break;
+            }
 
             if (!map.Contains((sand.x, sand.y + 1)))
                 sand = (sand.x, sand.y + 1);
@@ -40,9 +53,7 @@ public static class Program
                 sand = startingPoint;
             }
         }
-        return counter;
     }
-    public static string Task2() { return ""; }
 
     public static HashSet<(int x, int y)> CreateMap(List<string> input)
     {
