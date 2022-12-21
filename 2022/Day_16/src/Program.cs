@@ -13,7 +13,6 @@ public static class Program
         var input = File.ReadLines("input.txt").ParseInput();
 
         Console.WriteLine(Task1(input));
-        Console.WriteLine(Task2());
     }
 
     public static int Task1(Dictionary<string, Node> input)
@@ -27,44 +26,8 @@ public static class Program
         }
 
         foreach (var node in input.Values) BestPath(node, node.BestPaths);
-
-        return FindBest(input["AA"], 0, 1, new HashSet<string>());
-
-        // int FindBestSmart(Node node, int pressure, int round, HashSet<string> visited)
-        // {
-        //     node.IsOn = true;
-        //     visited.Add(node.Id);
-        //     var newPressure = pressure + ((31 - round) * node.Valve);
-
-        //     Console.WriteLine($"{round}:{visited.PrintList()}:{newPressure}");
-
-        //     if (AreAllOn() || round > 30)
-        //     {
-        //         visited.Remove(node.Id);
-        //         node.IsOn = false;
-        //         return newPressure;
-        //     }
-
-        //     var bestOption1 = non0Nodes
-        //         .Where(x => !visited.Contains(x.Id))
-        //         .OrderByDescending(x =>
-        //             {
-        //                 var t = 31 - (round + node.BestPaths[x.Id] + 1);
-        //                 t = t * x.Valve;
-        //                 Console.Write($"{x.Id}:{t}:");
-        //                 t = t * 100 + node.BestPaths[x.Id];
-        //                 Console.WriteLine(t);
-        //                 return t;
-        //             }).ToList();
-
-        //     var bestOption = bestOption1.First();
-
-        //     var r = FindBest(bestOption, newPressure, round + node.BestPaths[bestOption.Id] + 1, visited);
-
-        //     visited.Remove(node.Id);
-        //     node.IsOn = false;
-        //     return r;
-        // }
+        var topScore = 0;
+        return FindBestPart2(input["AA"], input["AA"], 0, 1, 1, new HashSet<string>() { "AA" });
 
         int FindBest(Node node, int pressure, int round, HashSet<string> visited)
         {
@@ -74,7 +37,7 @@ public static class Program
 
             Console.WriteLine($"{round}:{visited.PrintList()}:{newPressure}");
 
-            if (AreAllOn() || round > 30)
+            if (AreAllOn() || round == 31)
             {
                 visited.Remove(node.Id);
                 node.IsOn = false;
@@ -92,6 +55,53 @@ public static class Program
 
             visited.Remove(node.Id);
             node.IsOn = false;
+            return returnCollection.Any() ? returnCollection.Max() : 0;
+        }
+
+        int FindBestPart2(Node node1, Node node2, int pressure, int round1, int round2, HashSet<string> visited)
+        {
+            var visitedText = visited.PrintList();
+            Console.WriteLine($"{topScore}|{round1}/{round2}:{visitedText}:{pressure}");
+
+            if (pressure > topScore) topScore = pressure;
+
+            if (AreAllOn() || round1 > 27 || round2 > 27)
+            {
+                return pressure;
+            }
+
+            var remaining = non0Nodes.Where(x => !visited.Contains(x.Id)).ToList();
+
+            var possibleFuture = remaining.Select(x => x.Valve).Sum() * (27 - (round1 < round2 ? round2 : round1));
+            if (possibleFuture + pressure < topScore)
+            {
+                return pressure;
+            }
+
+            var returnCollection = new List<int>();
+            foreach (var row in remaining)
+            {
+                visited.Add(row.Id);
+                row.IsOn = true;
+
+                if (round1 > round2)
+                {
+                    var roundTemp = round2 + node2.BestPaths[row.Id] + 1;
+                    var newPressure = pressure + ((27 - roundTemp) * row.Valve);
+                    var r = FindBestPart2(node1, row, newPressure, round1, roundTemp, visited);
+                    returnCollection.Add(r);
+                }
+                else
+                {
+                    var roundTemp = round1 + node1.BestPaths[row.Id] + 1;
+                    var newPressure = pressure + ((27 - roundTemp) * row.Valve);
+                    var r = FindBestPart2(row, node2, newPressure, roundTemp, round2, visited);
+                    returnCollection.Add(r);
+                }
+                visited.Remove(row.Id);
+                row.IsOn = false;
+            }
+
             return returnCollection.Any() ? returnCollection.Max() : 0;
         }
 
@@ -153,3 +163,40 @@ public class Node
             BestPaths[key] = value;
     }
 }
+
+
+// int FindBestSmart(Node node, int pressure, int round, HashSet<string> visited)
+// {
+//     node.IsOn = true;
+//     visited.Add(node.Id);
+//     var newPressure = pressure + ((31 - round) * node.Valve);
+
+//     Console.WriteLine($"{round}:{visited.PrintList()}:{newPressure}");
+
+//     if (AreAllOn() || round > 30)
+//     {
+//         visited.Remove(node.Id);
+//         node.IsOn = false;
+//         return newPressure;
+//     }
+
+//     var bestOption1 = non0Nodes
+//         .Where(x => !visited.Contains(x.Id))
+//         .OrderByDescending(x =>
+//             {
+//                 var t = 31 - (round + node.BestPaths[x.Id] + 1);
+//                 t = t * x.Valve;
+//                 Console.Write($"{x.Id}:{t}:");
+//                 t = t * 100 + node.BestPaths[x.Id];
+//                 Console.WriteLine(t);
+//                 return t;
+//             }).ToList();
+
+//     var bestOption = bestOption1.First();
+
+//     var r = FindBest(bestOption, newPressure, round + node.BestPaths[bestOption.Id] + 1, visited);
+
+//     visited.Remove(node.Id);
+//     node.IsOn = false;
+//     return r;
+// }
