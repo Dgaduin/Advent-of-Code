@@ -28,7 +28,7 @@ public static class Program
 
         foreach (var node in input.Values) BestPath(node, node.BestPaths);
 
-        return FindBestSmart(input["AA"], 0, 1, new HashSet<string>());
+        return FindBest(input["AA"], 0, 1, new HashSet<string>());
 
         // int FindBestSmart(Node node, int pressure, int round, HashSet<string> visited)
         // {
