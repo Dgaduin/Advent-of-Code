@@ -23,38 +23,24 @@ public static class Program
         {
             var index = line.IndexOf(digit);
             if (index != -1 && index < first.Index)
-            {
-                first.Index = index;
-                first.Value = digit - '0';
-            }
+                first = (index, first.Value = digit - '0');
             var indexLast = line.LastIndexOf(digit);
             if (indexLast != -1 && indexLast > last.Index)
-            {
-                last.Index = indexLast;
-                last.Value = digit - '0';
-            }
+                last = (indexLast, last.Value = digit - '0');
         }
 
-        foreach (var digit in DigitsStrings)
+        foreach (var digit in DigitWords.Keys)
         {
             var index = line.IndexOf(digit);
             if (index != -1 && index < first.Index)
-            {
-                first.Index = index;
-                first.Value = DigitWords[digit];
-            }
+                first = (index, DigitWords[digit]);
             var indexLast = line.LastIndexOf(digit);
             if (indexLast != -1 && indexLast > last.Index)
-            {
-                last.Index = indexLast;
-                last.Value = DigitWords[digit];
-            }
+                last = (indexLast, DigitWords[digit]);
         }
-        Console.WriteLine($"{line} {first.Value * 10 + last.Value}");
         return first.Value * 10 + last.Value;
     }
     static readonly char[] DigitsChars = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    static readonly string[] DigitsStrings = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
     static readonly Dictionary<string, int> DigitWords = new(){
         { "one", 1},
         { "two", 2},
