@@ -19,16 +19,6 @@ public static class Program
         (int Index, int Value) first = (99, 0);
         (int Index, int Value) last = (-2, 0);
 
-        foreach (var digit in DigitsChars)
-        {
-            var index = line.IndexOf(digit);
-            if (index != -1 && index < first.Index)
-                first = (index, first.Value = digit - '0');
-            var indexLast = line.LastIndexOf(digit);
-            if (indexLast != -1 && indexLast > last.Index)
-                last = (indexLast, last.Value = digit - '0');
-        }
-
         foreach (var digit in DigitWords.Keys)
         {
             var index = line.IndexOf(digit);
@@ -40,16 +30,15 @@ public static class Program
         }
         return first.Value * 10 + last.Value;
     }
-    static readonly char[] DigitsChars = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
     static readonly Dictionary<string, int> DigitWords = new(){
-        { "one", 1},
-        { "two", 2},
-        { "three", 3},
-        { "four", 4},
-        { "five", 5},
-        { "six", 6},
-        { "seven", 7},
-        { "eight", 8},
-        { "nine", 9},
+        { "1", 1},        { "one",   1},
+        { "2", 2},        { "two",   2},
+        { "3", 3},        { "three", 3},
+        { "4", 4},        { "four",  4},
+        { "5", 5},        { "five",  5},
+        { "6", 6},        { "six",   6},
+        { "7", 7},        { "seven", 7},
+        { "8", 8},        { "eight", 8},
+        { "9", 9},        { "nine",  9},
     };
 }
