@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-namespace Day_D;
+﻿namespace Day_D;
 public static class Program
 {
     static void Main(string[] args)
     {
-        // List<string> input = File.ReadLines("input.txt").ToList();
-        // string input = File.ReadAllText("input.txt");
+        // var input = File.ReadLines("input.txt").ToList();
+        // var = File.ReadAllText("input.txt");
 
         Console.WriteLine(Task1());
         Console.WriteLine(Task2());
