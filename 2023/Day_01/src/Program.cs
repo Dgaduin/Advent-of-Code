@@ -4,8 +4,6 @@ public static class Program
     static void Main(string[] args)
     {
         var input = File.ReadLines("input.txt").ToList();
-        // var input = File.ReadAllText("input.txt");
-
         Console.WriteLine(Task1(input));
         Console.WriteLine(Task2(input));
     }
@@ -30,6 +28,7 @@ public static class Program
         }
         return first.Value * 10 + last.Value;
     }
+
     static readonly Dictionary<string, int> DigitWords = new(){
         { "1", 1},        { "one",   1},
         { "2", 2},        { "two",   2},
