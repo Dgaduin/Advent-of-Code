@@ -33,10 +33,7 @@ let extractLine (line: string) =
     { Id = id; Draws = draws }
 
 let checkIfPossible (line: Line) =
-    if line.Draws["green"] > 13 then false
-    else if line.Draws["blue"] > 14 then false
-    else if line.Draws["red"] > 12 then false
-    else true
+    line.Draws["green"] > 13 || line.Draws["blue"] > 14 || line.Draws["red"] > 12
 
 let lines = List.map extractLine input
 
