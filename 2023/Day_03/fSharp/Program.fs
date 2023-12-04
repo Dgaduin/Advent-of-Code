@@ -26,30 +26,32 @@ let padInput (input: list<string>) =
 
 let paddedInput = input |> padInput
 
-let iterCollection =
+let iterCollection (coll: list<string>) =
     seq {
-        for i = 1 to paddedInput.Length - 2 do
-            for j = 1 to paddedInput[0].Length - 2 do
-                yield (paddedInput[i].[j], i, j)
+        for i = 1 to coll.Length - 2 do
+            for j = 1 to coll[0].Length - 2 do
+                yield (coll[i].[j], i, j)
 
         yield ('a', 0, 0)
     }
 
-let checkNeighbours (i, j) =
-    let collection =
-        seq {
-            for i' in -1 .. 1 do
-                for j' in -1 .. 1 do
-                    yield
-                        paddedInput[i + i'].[j + j'] <> '.'
-                        && not (i' = 0 && Char.IsDigit paddedInput[i + i'].[j + j'])
-        }
+let iterSet = paddedInput |> iterCollection
 
-    collection |> Seq.fold (fun acc a -> acc || a) false
+let getNeighbours (coll: list<string>) (i: int, j: int) =
+    seq {
+        for i' in -1 .. 1 do
+            for j' in -1 .. 1 do
+                yield ((i + i'), (j + j'), coll[i + i'].[j + j'])
+    }
 
-let foldFields (numberBuffer, flag, sum) (c, i, j) =
+let checkNeighbours (coll: list<string>) (i, j) =
+    getNeighbours coll (i, j)
+    |> Seq.map (fun (i'', j'', c) -> c <> '.' && not ((i'' - i) = 0 && Char.IsDigit c))
+    |> Seq.fold (fun acc a -> acc || a) false
+
+let task1Fold coll (numberBuffer, flag, sum) (c, i, j) =
     if Char.IsDigit c then
-        (List.append numberBuffer [ c ], flag || checkNeighbours (i, j), sum)
+        (List.append numberBuffer [ c ], flag || (checkNeighbours coll) (i, j), sum)
     else
         let value =
             if numberBuffer.Length > 0 then
@@ -62,10 +64,10 @@ let foldFields (numberBuffer, flag, sum) (c, i, j) =
         else
             (List.empty, false, sum)
 
-let (_, _, result) = Seq.fold foldFields (List.empty, false, 0) iterCollection
+let (_, _, result) =
+    iterSet |> Seq.fold (task1Fold paddedInput) (List.empty, false, 0)
 
 printfn "%i" result
-
 
 let extractNumbers (numberBuffer, coords: Map<(int * int), int>, coordBuffer) (c, i: int, j: int) =
     if Char.IsDigit c then
@@ -80,16 +82,9 @@ let extractNumbers (numberBuffer, coords: Map<(int * int), int>, coordBuffer) (c
     else
         (List.empty, coords, coordBuffer)
 
-let getNeighbours (i: int, j: int) (coll: list<string>) =
-    seq {
-        for i' in -1 .. 1 do
-            for j' in -1 .. 1 do
-                yield ((i + i'), (j + j'), coll[i + i'].[j + j'])
-    }
-
-let foldFieldsTask2 (map: Map<(int * int), int>) coll sum (c, i, j) =
+let task2Fold (map: Map<(int * int), int>) coll sum (c, i, j) =
     if c = '*' then
-        let neighbours = getNeighbours (i, j) coll
+        let neighbours = getNeighbours coll (i, j)
 
         let numberNeighbours =
             neighbours
@@ -106,9 +101,8 @@ let foldFieldsTask2 (map: Map<(int * int), int>) coll sum (c, i, j) =
         sum
 
 let (_, numberMap, _) =
-    Seq.fold extractNumbers (List.empty, Map.empty, List.empty) iterCollection
+    Seq.fold extractNumbers (List.empty, Map.empty, List.empty) iterSet
 
-let result2 =
-    iterCollection |> Seq.fold (foldFieldsTask2 <| numberMap <| paddedInput) 0
+let result2 = iterSet |> Seq.fold (task2Fold <| numberMap <| paddedInput) 0
 
 printfn "%i" result2
