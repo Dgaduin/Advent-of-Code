@@ -4,8 +4,8 @@ open System.IO
 let input = File.ReadAllLines "../src/input.txt" |> List.ofArray
 
 let dot = "."
-let padString (s) = String.concat "" [ dot; s; dot ]
-let createPad (n) = String.init (n + 2) (fun y -> dot)
+let padString s = String.concat "" [ dot; s; dot ]
+let createPad n = String.init (n + 2) (fun y -> dot)
 
 let padInput (input: list<string>) =
     let padHorizontal = [ createPad input[0].Length ]
@@ -57,7 +57,7 @@ let (_, _, result) =
 
 printfn "%i" result
 
-let extractNumbers (numberBuffer, coords: Map<(int * int), int>, coordBuffer) (c, i: int, j: int) =
+let extractNumbers (numberBuffer, coords, coordBuffer) (c, i: int, j: int) =
     if Char.IsDigit c then
         (List.append numberBuffer [ c ], coords, List.append coordBuffer [ (i, j) ])
     else if numberBuffer.Length > 0 then
