@@ -3,18 +3,6 @@ open System.IO
 
 let input = File.ReadAllLines "../src/input.txt" |> List.ofArray
 
-// let testInput =
-//     [ "467..114.."
-//       "...*......"
-//       "..35..633."
-//       "......#..."
-//       "617*......"
-//       ".....+.58."
-//       "..592....."
-//       "......755."
-//       "...$.*...."
-//       ".664.598.." ]
-
 let dot = "."
 let padString (s) = String.concat "" [ dot; s; dot ]
 let createPad (n) = String.init (n + 2) (fun y -> dot)
