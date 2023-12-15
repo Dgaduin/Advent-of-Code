@@ -3,19 +3,6 @@ open System.IO
 
 let input = File.ReadAllLines "input.txt" |> Array.toList
 
-let testInput =
-    [ "RL"
-      ""
-      "AAA = (BBB, CCC)"
-      "BBB = (DDD, EEE)"
-      "CCC = (ZZZ, GGG)"
-      "DDD = (DDD, DDD)"
-      "EEE = (EEE, EEE)"
-      "GGG = (GGG, GGG)"
-      "ZZZ = (ZZZ, ZZZ)" ]
-
-
-
 let parseInput (input: string list) =
     let path =
         input
@@ -37,6 +24,8 @@ let parseInput (input: string list) =
 
 let (path, map) = parseInput input
 
+let isDone a = Seq.last a = 'Z'
+
 let rec walk path (map: Map<string, string[]>) root stepCount =
     let next (field, count, stopped) step =
         if stopped then
@@ -44,34 +33,30 @@ let rec walk path (map: Map<string, string[]>) root stepCount =
         else
             let ret = map.[field].[step]
 
-            if ret = "ZZZ" then
-                ("ZZZ", count + 1, true)
+            if isDone ret then
+                (ret, count + 1, true)
             else
                 (ret, count + 1, false)
 
     let (field, count, stopped) = path |> Seq.fold next (root, stepCount, false)
     if stopped then count else walk path map field count
 
-// walk path map "AAA" 0 |> printfn "%d"
+walk path map "AAA" 0 |> printfn "%d"
 
-let roots = map |> Map.keys |> Seq.filter (fun k -> Seq.last k = 'A') |> Seq.toList
+let rec gcd (a: int64) (b: int64) = if b = 0 then abs a else gcd b (a % b)
+let lcmSimple a b = a * b / (gcd a b)
 
-let rec walk2 (path: seq<int>) (map: Map<string, string[]>) roots stepCount =
-    let next field step = map.[field].[step]
+let rec lcm =
+    function
+    | [ a; b ] -> lcmSimple a b
+    | head :: tail -> lcmSimple (head) (lcm (tail))
+    | [] -> 1
 
-    let pathFolding (roots, count, stopped) step =
-        if stopped then
-            (roots, count, stopped)
-        else
-            let newRoots = roots |> List.map (fun root -> next root step)
-            let isDone = newRoots |> List.forall (fun root -> Seq.last root = 'Z')
-
-            if isDone then
-                (newRoots, count + 1, true)
-            else
-                (newRoots, count + 1, false)
-
-    let (roots, count, completed) =
-        path |> Seq.fold pathFolding (roots, stepCount, false)
-
-    if completed then count else walk2 path map roots count
+map
+|> Map.keys
+|> Seq.filter (fun k -> Seq.last k = 'A')
+|> Seq.toList
+|> List.map (fun root -> walk path map root 0)
+|> List.map int64
+|> lcm
+|> printfn "%A"
