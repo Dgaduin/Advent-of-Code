@@ -15,8 +15,7 @@ let inputParse (s: string) =
 
 let coll1, coll2 = input |> inputParse
 
-let task1 =
-    Array.zip coll1 coll2 |> Array.map (fun (a, b) -> abs (a - b)) |> Array.sum
+let task1 = Array.zip coll1 coll2 |> Array.sumBy (fun (a, b) -> abs (a - b))
 
 let scoreMap =
     coll2
@@ -31,7 +30,7 @@ let scoreLookup (i: int) =
         | Some(x) -> x
         | None -> 0
 
-let task2 = coll2 |> Array.map (fun x -> x * scoreLookup x) |> Array.sum
+let task2 = coll1 |> Array.map (fun x -> x * scoreLookup x) |> Array.sum
 
 task2 |> printfn "Task 2 actual input: %i"
 task1 |> printfn "Task 1 actual input: %i"
