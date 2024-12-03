@@ -7,14 +7,14 @@ let input = File.ReadAllText "input.txt"
 let calculateScore (m: Match) =
     m.Groups
     |> Seq.tail
-    |> Seq.filter (fun x -> x.Length <> 0)
+    |> Seq.filter (fun g -> g.Length <> 0)
     |> Seq.fold (fun prod g -> int g.Value * prod) 1
 
 let regexTask1 = Regex @"mul\((\d{1,3}),(\d{1,3})\)"
 
 input
 |> regexTask1.Matches
-|> Seq.fold (fun x m -> x + calculateScore m) 0
+|> Seq.fold (fun sum m -> sum + calculateScore m) 0
 |> printfn "Task 1: %A"
 
 let regexTask2 = Regex @"mul\((\d{1,3}),(\d{1,3})\)|(don't\(\))|(do\(\))"
