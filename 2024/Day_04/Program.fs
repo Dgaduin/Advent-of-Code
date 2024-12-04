@@ -83,10 +83,8 @@ let task2 input =
 
         [ for i in 1..rows do
               for j in 1..cols do
-                  task2Test x[i - 1 .. i + 1, j - 1 .. j + 1]
-                  |> function
-                      | true -> 1
-                      | false -> 0 ]
-    |> List.sum
+                  if task2Test x[i - 1 .. i + 1, j - 1 .. j + 1] then
+                      yield 1 ]
+    |> List.length
 
 input |> task2 |> printfn "Task 2:%A"
